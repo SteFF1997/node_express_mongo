@@ -98,7 +98,7 @@ const BootcampSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now
-    },
+    }
     // user: {
     //   type: mongoose.Schema.ObjectId,
     //   ref: 'User',
@@ -151,4 +151,4 @@ const BootcampSchema = new mongoose.Schema(
 //   justOne: false
 // });
 
-export default  mongoose.model('Bootcamp', BootcampSchema);
+export default mongoose.model('Bootcamp', BootcampSchema);

@@ -14,7 +14,9 @@ class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      console.log(colors.blue.bold(`App listening on the http://localhost:${this.port}`));
+      console.log(
+        colors.blue.bold(`App listening on the http://localhost:${this.port}`)
+      );
     });
   }
 

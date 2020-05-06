@@ -15,10 +15,7 @@ import loggerMiddleware from './middlewares/logger';
 
 const app = new App({
   port: process.env.PORT || '5001',
-  controllers: [
-    new AppStateController(),
-    new BootCampsController(),
-  ],
+  controllers: [new AppStateController(), new BootCampsController()],
   middleWares: [
     bodyParser.json(),
     bodyParser.urlencoded({ extended: true }),

@@ -23,9 +23,9 @@ class BootCampsController implements IControllerBase {
   public getBootCamps = async (request: Request, response: Response) => {
     try {
       const bootcamps = await BootcampModel.find();
-      response.status(200).json({ success: true, data: bootcamps })
+      response.status(200).json({ success: true, data: bootcamps });
     } catch (e) {
-      response.status(400).json({ success: false })
+      response.status(400).json({ success: false });
     }
   };
 
@@ -35,8 +35,10 @@ class BootCampsController implements IControllerBase {
   public getBootCamp = async (request: Request, response: Response) => {
     try {
       const bootcamp = await BootcampModel.findById(request.params.id);
-      if (!bootcamp) { response.status(404).json({ success: false }); }
-      response.status(200).json({ success: true, data: bootcamp })
+      if (!bootcamp) {
+        response.status(404).json({ success: false });
+      }
+      response.status(200).json({ success: true, data: bootcamp });
     } catch (e) {
       response.status(400).json({ success: false });
     }
@@ -48,7 +50,7 @@ class BootCampsController implements IControllerBase {
   public createBootCamp = async (request: Request, response: Response) => {
     try {
       const newBootCamp = await BootcampModel.create(request.body);
-      response.status(200).json({ success: true, data: newBootCamp })
+      response.status(201).json({ success: true, data: newBootCamp });
     } catch (e) {
       response.status(400).json({ success: false });
     }
@@ -58,7 +60,9 @@ class BootCampsController implements IControllerBase {
   // @route   Post /api1/v1/bootcamps
   // @access  Public
   public updateBootCamp = (request: Request, response: Response) => {
-    response.status(200).json({ message: 'updateBootCamp', id: request.params.id })
+    response
+      .status(200)
+      .json({ message: 'updateBootCamp', id: request.params.id });
   };
 }
 
