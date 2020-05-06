@@ -15,6 +15,7 @@ class BootCampsController implements IControllerBase {
     this.router.get(`${this.path}/:id`, this.getBootCamp);
     this.router.post(`${this.path}`, this.createBootCamp);
     this.router.put(`${this.path}/:id`, this.updateBootCamp);
+    this.router.delete(`${this.path}/:id`, this.deleteBootcamp);
   }
 
   // @desc    Get all bootcamps
@@ -23,7 +24,9 @@ class BootCampsController implements IControllerBase {
   public getBootCamps = async (request: Request, response: Response) => {
     try {
       const bootcamps = await BootcampModel.find();
-      response.status(200).json({ success: true, data: bootcamps });
+      response.status(200).json({
+        success: true, count: bootcamps.length, data: bootcamps,
+      });
     } catch (e) {
       response.status(400).json({ success: false });
     }
@@ -59,10 +62,37 @@ class BootCampsController implements IControllerBase {
   // @desc    Update bootcamp by id
   // @route   Post /api1/v1/bootcamps
   // @access  Public
-  public updateBootCamp = (request: Request, response: Response) => {
-    response
-      .status(200)
-      .json({ message: 'updateBootCamp', id: request.params.id });
+  public updateBootCamp = async (request: Request, response: Response) => {
+    try {
+      const bootcamp = await BootcampModel.findByIdAndUpdate(
+        request.params.id,
+        request.body,
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+      if (!bootcamp) {
+        return response.status(400).json({ success: false });
+      }
+
+      response.status(200).json({ status: true, data: bootcamp });
+    } catch (e) {
+      response.status(400).json({ success: false });
+    }
+  };
+
+  public deleteBootcamp = async (request: Request, response: Response) => {
+    try {
+      const bootcamp = await BootcampModel.findByIdAndDelete(request.params.id);
+      if (!bootcamp) {
+        return response.status(400).json({ success: false });
+      }
+
+      response.status(200).json({ status: true, data: {} });
+    } catch (e) {
+      response.status(400).json({ success: false });
+    }
   };
 }
 
