@@ -1,7 +1,9 @@
 import express, { Request, Response } from 'express';
 
 import IControllerBase from '../interfaces/IControllerBase.interface';
+import errorHandler from '../middlewares/error';
 import BootcampModel from '../models/Bootcamp';
+import ErrorResponse from '../utils/ErrorResponse';
 
 class BootCampsController implements IControllerBase {
   public path = '/bootcamps';
@@ -25,25 +27,38 @@ class BootCampsController implements IControllerBase {
     try {
       const bootcamps = await BootcampModel.find();
       response.status(200).json({
-        success: true, count: bootcamps.length, data: bootcamps,
+        success: true,
+        count: bootcamps.length,
+        data: bootcamps
       });
     } catch (e) {
-      response.status(400).json({ success: false });
+      errorHandler(e, request, response);
     }
   };
 
   // @desc    Get bootcamp by id
   // @route   GET /api1/v1/bootcamps/:id
   // @access  Public
-  public getBootCamp = async (request: Request, response: Response) => {
+  public getBootCamp = async (
+    request: Request,
+    response: Response,
+  ) => {
     try {
       const bootcamp = await BootcampModel.findById(request.params.id);
       if (!bootcamp) {
-        response.status(404).json({ success: false });
+        return errorHandler(
+          new ErrorResponse(
+            `Bootcamp not fund with id of ${request.params.id}`,
+            404
+          ),
+          request,
+          response
+        );
       }
       response.status(200).json({ success: true, data: bootcamp });
     } catch (e) {
-      response.status(400).json({ success: false });
+      // response.status(400).json({ success: false });
+      errorHandler(e, request, response);
     }
   };
 
@@ -55,7 +70,7 @@ class BootCampsController implements IControllerBase {
       const newBootCamp = await BootcampModel.create(request.body);
       response.status(201).json({ success: true, data: newBootCamp });
     } catch (e) {
-      response.status(400).json({ success: false });
+      errorHandler(e, request, response);
     }
   };
 
@@ -73,12 +88,19 @@ class BootCampsController implements IControllerBase {
         }
       );
       if (!bootcamp) {
-        return response.status(400).json({ success: false });
+        return errorHandler(
+          new ErrorResponse(
+            `Bootcamp not fund with id of ${request.params.id}`,
+            404
+          ),
+          request,
+          response
+        );
       }
 
       response.status(200).json({ status: true, data: bootcamp });
     } catch (e) {
-      response.status(400).json({ success: false });
+      errorHandler(e, request, response);
     }
   };
 
@@ -86,12 +108,19 @@ class BootCampsController implements IControllerBase {
     try {
       const bootcamp = await BootcampModel.findByIdAndDelete(request.params.id);
       if (!bootcamp) {
-        return response.status(400).json({ success: false });
+        return errorHandler(
+          new ErrorResponse(
+            `Bootcamp not fund with id of ${request.params.id}`,
+            404
+          ),
+          request,
+          response
+        );
       }
 
       response.status(200).json({ status: true, data: {} });
     } catch (e) {
-      response.status(400).json({ success: false });
+      errorHandler(e, request, response);
     }
   };
 }
