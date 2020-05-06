@@ -11,6 +11,7 @@ connectDB();
 
 import AppStateController from './controllers/AppState';
 import BootCampsController from './controllers/BootCamps';
+import errorHandler from './middlewares/error' ;
 import loggerMiddleware from './middlewares/logger';
 
 const app = new App({
@@ -20,9 +21,13 @@ const app = new App({
     bodyParser.json(),
     bodyParser.urlencoded({ extended: true }),
     loggerMiddleware,
+    errorHandler,
     morgan('dev')
   ]
 });
+
+app.app.use(loggerMiddleware);
+app.app.use(errorHandler);
 
 app.listen();
 
